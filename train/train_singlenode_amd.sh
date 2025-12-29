@@ -1,5 +1,5 @@
 #!/bin/bash
-
+export WANDB_DISABLED=true
 NET_TYPE="high"
 RESTART_CONFIG="false"
 CHECK_INTERVAL=1200
@@ -50,10 +50,10 @@ export NCCL_DEBUG=WARN
 
 model_path=../../../models/Hunyuan-A13B-Instruct
 tokenizer_path=../models
-train_data_file=car_train.jsonl
+train_data_file=example_data.jsonl
 
-# ds_config_file=ds_zero2_no_offload.json
-ds_config_file=ds_zero3_no_offload.json
+ds_config_file=ds_zero2_no_offload.json
+# ds_config_file=ds_zero3_no_offload.json
 # ds_config_file=ds_zero3_offload_no_auto.json
 
 output_path=/root/hf_train_output
@@ -85,7 +85,7 @@ deepspeed --master_addr $CHIEF_IP train.py \
     --lr_scheduler_type cosine_with_min_lr \
     --logging_steps 1 \
     --max_steps 200 \
-    --save_steps 100 \
+    --save_steps 1000 \
     --learning_rate 1e-5 \
     --min_lr 1e-6 \
     --warmup_ratio 0.01 \
@@ -96,10 +96,10 @@ deepspeed --master_addr $CHIEF_IP train.py \
     --model_max_length 4096 \
     --max_seq_length 4096 \
     --moe_topk 1 \
-    --num_experts 2 \
+    --num_experts 64 \
     --num_attention_heads 80 \
     --num_key_value_heads 8 \
-    --num_layers 4 \
+    --num_layers 32 \
     --cla_share_factor 2 \
     --use_cla \
     --use_mixed_mlp_moe \
