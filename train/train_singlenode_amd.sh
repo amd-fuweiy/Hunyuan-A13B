@@ -105,4 +105,8 @@ deepspeed --master_addr $CHIEF_IP train.py \
     --use_mixed_mlp_moe \
     --num_shared_expert 1 \
     --use_qk_norm \
+    --use_lora \
+    --lora_rank 64 \
+    --lora_alpha 128 \
+    --lora_dropout 0.1 \
     --bf16 | tee ${log_file}
